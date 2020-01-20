@@ -1,0 +1,43 @@
+@(guests: java.util.List[models.Guest], restForm: Form[Guest])
+@import helper._
+
+
+@main("guests") {
+<a href="/">Home page</a>
+<table>
+  <tr>
+    <th>Active</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Phone</th>
+    <th>Email</th>
+  </tr>
+  @for(guest <- guests) {
+  <tr>
+    <td>@if(guest.isActive()) { Yes } else { No }</td>
+    <td>
+      <a href="/guest/@guest.getId()">
+        @guest.getFirstName()
+      </a>
+    </td>
+    <td>@guest.getLastName()</td>
+    <td>@guest.getPhone()</td>
+    <td>@guest.getEmail()</td>
+  </tr>
+  }
+</table>
+
+@form(routes.GuestController.addguest()) {
+@inputText(restForm("FirstName"))
+@inputText(restForm("LastName"))
+@inputText(restForm("Phone"))
+@inputText(restForm("Email"))
+<dl class=" " id="Active_field">
+  <dt><label for="Active">Active</label></dt>
+  <dd>
+    <input type="checkbox" id="Active" name="Active" checked="checked">
+  </dd>
+</dl>
+<input type="submit" value="Добавить гостя">
+}
+}

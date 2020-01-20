@@ -1,0 +1,44 @@
+@(restaurants: java.util.List[models.Restaurant], restForm: Form[Restaurant])
+@import helper._
+
+@main("restaurants") {
+<a href="/">Home page</a>
+<table>
+  <tr>
+    <th>Active</th>
+    <th>Name</th>
+    <th>INN</th>
+    <th>ULName</th>
+    <th>Address</th>
+  </tr>
+  @for(restaurant <- restaurants) {
+  <tr>
+      <td>@if(restaurant.isActive()) {
+        Yes
+        } else {
+        No
+        } </td>
+      <td>
+        <a href="/restaurant/@restaurant.getId()">@restaurant.getName()
+        </a>
+      </td>
+      <td>@restaurant.getINN()</td>
+      <td>@restaurant.getULName()</td>
+      <td>@restaurant.getAddress()</td>
+  </tr>
+  }
+</table>
+@form(routes.RestaurantController.addrest()) {
+@inputText(restForm("Name"), '_help -> "up to 50 symbols")
+@inputText(restForm("INN"))
+@inputText(restForm("ULName"))
+@inputText(restForm("Address"))
+<dl class=" " id="Active_field">
+    <dt><label for="Active">Active</label></dt>
+    <dd>
+        <input type="checkbox" id="Active" name="Active" checked="checked">
+    </dd>
+</dl>
+<input type="submit" value="Добавить ресторан">
+}
+}

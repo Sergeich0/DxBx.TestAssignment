@@ -1,0 +1,90 @@
+@(restaurant: models.Restaurant, restForm: Form[Restaurant], id: Long)
+@import helper._
+
+@main("restaurant") {
+  <a href="/">Home page</a>
+  <a href="/restaurants">Restaurants list</a>
+  <h1>@restaurant.getName()</h1>
+  @form(routes.RestaurantController.editrest(id)) {
+    <input type="hidden" name="id" value="@restaurant.getId()">
+    <dl class=" " id="Name_field">
+      <dt><label for="Name">Name</label></dt>
+      <dd>
+        <input type="text" id="Name" name="Name" value="@restaurant.getName()">
+      </dd>
+    </dl>
+    <dl class=" " id="ULName_field">
+      <dt><label for="ULName">ULName</label></dt>
+      <dd>
+        <input type="text" id="ULName" name="ULName" value="@restaurant.getULName()">
+      </dd>
+    </dl>
+    <dl class=" " id="INN_field">
+      <dt><label for="INN">INN</label></dt>
+      <dd>
+        <input type="text" id="INN" name="INN" value="@restaurant.getINN()">
+      </dd>
+      <dd class="info">Required</dd>
+    </dl>
+    <dl class=" " id="Address_field">
+      <dt><label for="Address">Address</label></dt>
+      <dd>
+        <input type="text" id="Address" name="Address" value="@restaurant.getAddress()">
+      </dd>
+    </dl>
+    <dl class=" " id="Active_field">
+      <dt><label for="Active">Active</label></dt>
+      <dd>
+        @if(restaurant.isActive()){
+          <input type="checkbox" id="Active" name="Active" checked="checked">
+        } else {
+          <input type="checkbox" id="Active" name="Active">
+        }
+      </dd>
+    </dl>
+    <input type="submit" value="Save restaurant">
+  }
+<hr>
+<h2>Guests</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Phone</th>
+    <th>Email</th>
+  </tr>
+  @for(guest <- restaurant.getGuests()) {
+  <tr>
+    <td>
+      <a href="/editrest/@id?deleted=@guest.getId()">
+        Delete Guest
+      </a>
+    </td>
+    <td>
+      <a href="/guest/@guest.getId()">
+        @guest.getFirstName()
+      </a>
+    </td>
+    <td>@guest.getLastName()</td>
+    <td>@guest.getPhone()</td>
+    <td>@guest.getEmail()</td>
+  </tr>
+  }
+</table>
+<hr>
+@if(restaurant.isActive()){
+<h2>Add guest</h2>
+@form(routes.RestaurantController.editGuest(id)) {
+<dl class=" " id="searchable_field">
+  <dt><label for="searchable">Guest contact</label></dt>
+  <dd>
+    <input type="text" id="searchable" name="searchable" value="" placeholder="Guests phone or email">
+  </dd>
+</dl>
+<input type="submit" value="Add guest">
+}
+} else {
+<h3>Restaurant must be active for adding guests</h3>
+}
+}
